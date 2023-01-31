@@ -1,0 +1,4 @@
+**/*-snapshots/*
+coverage/
+dist/
+test-results/

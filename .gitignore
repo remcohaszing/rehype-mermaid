@@ -1,0 +1,9 @@
+coverage/
+dist/
+node_modules/
+test-results/
+*.d.ts
+*.js
+*.log
+*.map
+*.tgz

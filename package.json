@@ -1,0 +1,57 @@
+{
+  "name": "rehype-mermaid",
+  "version": "0.0.0",
+  "description": "A rehype plugin to render mermaid diagrams",
+  "exports": "./index.js",
+  "type": "module",
+  "files": [
+    "index.d.ts",
+    "index.js"
+  ],
+  "scripts": {
+    "prepack": "tsc --noEmit false",
+    "test": "c8 ts-node-esm test/test.ts"
+  },
+  "author": "Remco Haszing <remcohaszing@gmail.com>",
+  "license": "MIT",
+  "repository": "remcohaszing/rehype-mermaid",
+  "bugs": "https://github.com/remcohaszing/rehype-mermaid/issues",
+  "homepage": "https://github.com/remcohaszing/rehype-mermaid#readme",
+  "funding": "https://github.com/sponsors/remcohaszing",
+  "keywords": [
+    "documentation",
+    "mdx",
+    "mermaid",
+    "plugin",
+    "rehype",
+    "rehype-plugin",
+    "remark",
+    "unified"
+  ],
+  "dependencies": {
+    "@types/hast": "^2.0.0",
+    "hast-util-from-html-isomorphic": "^1.0.0",
+    "hast-util-to-text": "^3.0.0",
+    "mermaid-isomorphic": "^2.0.0",
+    "mini-svg-data-uri": "^1.0.0",
+    "space-separated-tokens": "^2.0.0",
+    "unified": "^10.0.0",
+    "unist-util-visit-parents": "^5.0.0",
+    "vfile": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/prettier": "^2.0.0",
+    "c8": "^7.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-remcohaszing": "^9.0.0",
+    "prettier": "^2.0.0",
+    "rehype": "^12.0.0",
+    "remark-cli": "^11.0.0",
+    "remark-preset-remcohaszing": "^1.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0",
+    "unist-util-remove-position": "^4.0.0",
+    "vfile-message": "^3.0.0"
+  }
+}
