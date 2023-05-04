@@ -89,7 +89,7 @@ function isMermaidElement(element: Element, strategy: Strategy): boolean {
 
 export interface RehypeMermaidOptions
   extends CreateMermaidRendererOptions,
-    Omit<RenderOptions, 'format'> {
+    Omit<RenderOptions, 'screenshot'> {
   /**
    * Create a fallback node if processing of a mermaid diagram fails.
    *
