@@ -1,6 +1,6 @@
 {
   "name": "rehype-mermaidjs",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A rehype plugin to render mermaid diagrams",
   "exports": "./index.js",
   "type": "module",
