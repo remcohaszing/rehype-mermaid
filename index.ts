@@ -55,11 +55,11 @@ function validateStrategy(strategy: Strategy | undefined = 'inline-svg'): Strate
 }
 
 /**
- * Check if a hast element has the `lang-mermaid` class name.
+ * Check if a hast element has the `language-mermaid` class name.
  *
  * @param element The hast element to check.
  * @param strategy The mermaid strategy to use.
- * @returns Whether or not the element has the `lang-mermaid` class name.
+ * @returns Whether or not the element has the `language-mermaid` class name.
  */
 function isMermaidElement(element: Element, strategy: Strategy): boolean {
   let mermaidClassName: string
@@ -70,7 +70,7 @@ function isMermaidElement(element: Element, strategy: Strategy): boolean {
     }
     mermaidClassName = 'mermaid'
   } else if (element.tagName === 'code') {
-    mermaidClassName = 'lang-mermaid'
+    mermaidClassName = 'language-mermaid'
   } else {
     return false
   }

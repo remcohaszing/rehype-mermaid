@@ -1,0 +1,16 @@
+<html>
+  <head></head>
+  <body>
+    <p>If a code element with class "language-mermaid" has siblings, it should be ignored</p>
+    <pre>
+      This diagram is ignored.
+      <code class="language-mermaid">
+        graph TD;
+            A-->B;
+            A-->C;
+            B-->D;
+            C-->D;
+      </code>
+    </pre>
+  </body>
+</html>

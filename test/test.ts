@@ -186,7 +186,7 @@ test('className as string', async () => {
           {
             type: 'element',
             tagName: 'code',
-            properties: { className: 'lang-mermaid' },
+            properties: { className: 'language-mermaid' },
             children: [{ type: 'text', value: 'graph TD;' }]
           }
         ]

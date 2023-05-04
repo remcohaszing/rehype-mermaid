@@ -48,7 +48,7 @@ information.
 
 ## Usage
 
-This plugin takes all `<pre class="mermaid">` and `<code class="lang-mermaid">` elements, and
+This plugin takes all `<pre class="mermaid">` and `<code class="language-mermaid">` elements, and
 replaces them with a rendered version of the diagram. If the `<code>` element is wrapped in a
 `<pre>` element, the `<pre>` element is replaced as well. This is compatible with what Mermaid would
 render client side, as well as the output of `mermaid` code blocks processed by
@@ -64,7 +64,7 @@ Given a file named `index.html`:
     <meta charset="utf-8" />
   </head>
   <body>
-    <pre><code class="lang-mermaid">
+    <pre><code class="language-mermaid">
       graph TD;
           A-->B;
           A-->C;
