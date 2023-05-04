@@ -233,7 +233,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
       } else if (options?.errorFallback) {
         replacement = options.errorFallback(node, diagram, result.reason, file)
       } else {
-        file.fail(result.reason, node, 'rehype-mermaid:rehype-mermaid')
+        file.fail(result.reason, node, 'rehype-mermaidjs:rehype-mermaidjs')
       }
 
       const nodeIndex = parent.children.indexOf(node)

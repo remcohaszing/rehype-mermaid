@@ -1,8 +1,8 @@
-# rehype-mermaid
+# rehype-mermaidjs
 
-[![github actions](https://github.com/remcohaszing/rehype-mermaid/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/rehype-mermaid/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/remcohaszing/rehype-mermaid/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/rehype-mermaid)
-[![npm](https://img.shields.io/npm/v/rehype-mermaid)](https://www.npmjs.com/package/rehype-mermaid)
+[![github actions](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/gh/remcohaszing/rehype-mermaidjs/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/rehype-mermaidjs)
+[![npm](https://img.shields.io/npm/v/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
 [![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io)
 
 A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.github.io) diagrams.
@@ -33,7 +33,7 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
 ## Installation
 
 ```sh
-npm install rehype-mermaid
+npm install rehype-mermaidjs
 ```
 
 In Node.js this package uses [playwright](https://playwright.dev) under the hood. To use it, you may
@@ -88,7 +88,7 @@ The following script:
 import { readFile } from 'node:fs/promises'
 
 import { rehype } from 'rehype'
-import rehypeMermaid from 'rehype-mermaid'
+import rehypeMermaid from 'rehype-mermaidjs'
 
 const { value } = await rehype()
   .use(rehypeMermaid, {

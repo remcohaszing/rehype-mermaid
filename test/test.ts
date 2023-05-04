@@ -106,8 +106,8 @@ test('invalid diagram unhandled', async () => {
     () => processor.process('<pre class="mermaid">This is not a valid diagram</pre>'),
     (error) => {
       assert(error instanceof VFileMessage)
-      assert.equal(error.source, 'rehype-mermaid')
-      assert.equal(error.ruleId, 'rehype-mermaid')
+      assert.equal(error.source, 'rehype-mermaidjs')
+      assert.equal(error.ruleId, 'rehype-mermaidjs')
       assert.equal(
         error.reason,
         'No diagram type detected matching given configuration for text: This is not a valid diagram'
