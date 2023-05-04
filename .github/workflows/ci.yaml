@@ -51,7 +51,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         node-version:
@@ -72,8 +71,8 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: test-results-node${{ matrix.node-version }}
-          path: test-results/
+          name: test-fixtures-node${{ matrix.node-version }}
+          path: test/fixtures/
       - uses: codecov/codecov-action@v3
         if: ${{ matrix.node-version == 18 }}
 
