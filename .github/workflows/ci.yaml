@@ -93,6 +93,7 @@ jobs:
       - pack
       - prettier
       - remark
+      - test
       - tsc
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
