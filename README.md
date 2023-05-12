@@ -22,7 +22,7 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
       - [`css`](#css)
       - [`errorFallback`](#errorfallback)
       - [`launchOptions`](#launchoptions)
-      - [`mermaidOptions`](#mermaidoptions)
+      - [`mermaidConfig`](#mermaidconfig)
       - [`prefix`](#prefix)
       - [`strategy`](#strategy)
 - [Compatibility](#compatibility)
@@ -223,7 +223,7 @@ block is removed. The function receives the following arguments:
 
 The options used to launch the browser. (`object`)
 
-##### `mermaidOptions`
+##### `mermaidConfig`
 
 A custom Mermaid configuration. By default `fontFamily` is set to `arial,sans-serif`. This option is
 ignored in the browser. You need to call `mermaid.initialize()` manually. (`object`)
