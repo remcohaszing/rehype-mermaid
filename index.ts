@@ -233,6 +233,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
             ancestors
           })
           message.fatal = true
+          message.url = 'https://github.com/remcohaszing/rehype-mermaidjs'
           throw message
         }
 
