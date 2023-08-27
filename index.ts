@@ -133,7 +133,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   return (ast, file) => {
     const instances: CodeInstance[] = []
 
-    visitParents(ast, 'element', (node: Element, ancestors: (Element | Root)[]) => {
+    visitParents(ast, 'element', (node, ancestors) => {
       if (!isMermaidElement(node, strategy)) {
         return
       }
