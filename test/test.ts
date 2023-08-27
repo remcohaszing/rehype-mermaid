@@ -35,7 +35,7 @@ async function readFixture(name: string, expectedName: string): Promise<FixtureT
   return {
     input,
     async validate(actual, verify = true) {
-      const normalized = prettier.format(String(actual), { parser: 'html' })
+      const normalized = await prettier.format(String(actual), { parser: 'html' })
       if (process.argv.includes('update') || !expected) {
         await writeFile(expectedPath, normalized)
       }
@@ -112,7 +112,7 @@ test('invalid diagram unhandled', async () => {
         error.reason,
         'No diagram type detected matching given configuration for text: This is not a valid diagram'
       )
-      assert.deepEqual(error.position, {
+      assert.deepEqual(error.place, {
         start: { line: 1, column: 1, offset: 0 },
         end: { line: 1, column: 55, offset: 54 }
       })
@@ -136,7 +136,9 @@ test('invalid diagram error fallback returns replacement', async () => {
 
   const result = await processor.process('<pre class="mermaid">This is not a valid diagram</pre>')
 
-  assert.deepEqual(removePosition(element!, { force: true }), {
+  assert.ok(element)
+  removePosition(element, { force: true })
+  assert.deepEqual(element, {
     type: 'element',
     tagName: 'pre',
     properties: { className: ['mermaid'] },
@@ -162,7 +164,9 @@ test('invalid diagram error fallback returns undefined', async () => {
 
   const result = await processor.process('<pre class="mermaid">This is not a valid diagram</pre>')
 
-  assert.deepEqual(removePosition(element!, { force: true }), {
+  assert.ok(element)
+  removePosition(element, { force: true })
+  assert.deepEqual(element, {
     type: 'element',
     tagName: 'pre',
     properties: { className: ['mermaid'] },
@@ -182,6 +186,7 @@ test('className as string', async () => {
       {
         type: 'element',
         tagName: 'pre',
+        properties: {},
         children: [
           {
             type: 'element',

@@ -1,4 +1,4 @@
-import { type Content, type Element, type Root } from 'hast'
+import { type Element, type ElementContent, type Root } from 'hast'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toText } from 'hast-util-to-text'
 import {
@@ -105,7 +105,7 @@ export interface RehypeMermaidOptions
     diagram: string,
     error: unknown,
     file: VFile
-  ) => Content | null | undefined | void
+  ) => ElementContent | null | undefined | void
 
   /**
    * How to insert the rendered diagram into the document.
@@ -139,7 +139,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
       }
 
       let codeElement = node
-      let parent = ancestors[ancestors.length - 1]
+      let parent = ancestors.at(-1)!
 
       // This is <code> wrapped in a <pre> element.
       if (parent.type === 'element' && parent.tagName === 'pre') {
@@ -158,7 +158,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
         // We want to replace the parent (<pre>), not the child (<code>).
         codeElement = parent
         // The grantparent becomes the parent.
-        parent = ancestors[ancestors.length - 2]
+        parent = ancestors.at(-2)!
       }
 
       instances.push({
@@ -193,7 +193,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
     )
 
     for (const [index, { diagram, node, parent }] of instances.entries()) {
-      let replacement: Content | null | undefined | void
+      let replacement: ElementContent | null | undefined | void
       const result = results[index]
 
       if (result.status === 'fulfilled') {
@@ -214,7 +214,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
             children: []
           }
         } else if (strategy === 'inline-svg') {
-          replacement = fromHtmlIsomorphic(svg, { fragment: true }).children[0]
+          replacement = fromHtmlIsomorphic(svg, { fragment: true }).children[0] as Element
         } else if (strategy === 'img-svg') {
           replacement = {
             type: 'element',
