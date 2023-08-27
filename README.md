@@ -2,8 +2,8 @@
 
 [![github actions](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/remcohaszing/rehype-mermaidjs/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/rehype-mermaidjs)
-[![npm](https://img.shields.io/npm/v/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
-[![prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io)
+[![npm version](https://img.shields.io/npm/v/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
+[![npm downloads](https://img.shields.io/npm/dm/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
 
 A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.github.io) diagrams.
 
