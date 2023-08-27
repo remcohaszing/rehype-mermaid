@@ -79,7 +79,7 @@ for (const name of fixtureNames) {
       const { input, validate } = await readFixture(name, 'pre-mermaid.html')
       const processor = rehype().use(rehypeMermaid, { strategy: 'pre-mermaid' })
 
-      const result = await processor.process(input)
+      const result = processor.processSync(input)
 
       await validate(result)
     })

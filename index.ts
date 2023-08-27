@@ -130,7 +130,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   const strategy = validateStrategy(options?.strategy)
   const renderDiagrams = createMermaidRenderer(options)
 
-  return async (ast, file) => {
+  return (ast, file) => {
     const instances: CodeInstance[] = []
 
     visitParents(ast, 'element', (node: Element, ancestors: (Element | Root)[]) => {
@@ -187,62 +187,62 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
       return
     }
 
-    const results = await renderDiagrams(
+    return renderDiagrams(
       instances.map((instance) => instance.diagram),
       { ...options, screenshot: strategy === 'img-png' }
-    )
+    ).then((results) => {
+      for (const [index, { diagram, node, parent }] of instances.entries()) {
+        let replacement: ElementContent | null | undefined | void
+        const result = results[index]
 
-    for (const [index, { diagram, node, parent }] of instances.entries()) {
-      let replacement: ElementContent | null | undefined | void
-      const result = results[index]
+        if (result.status === 'fulfilled') {
+          const { description, height, id, screenshot, svg, title, width } = result.value
 
-      if (result.status === 'fulfilled') {
-        const { description, height, id, screenshot, svg, title, width } = result.value
-
-        if (screenshot) {
-          replacement = {
-            type: 'element',
-            tagName: 'img',
-            properties: {
-              alt: description || '',
-              height,
-              id,
-              src: `data:image/png;base64,${screenshot.toString('base64')}`,
-              title,
-              width
-            },
-            children: []
+          if (screenshot) {
+            replacement = {
+              type: 'element',
+              tagName: 'img',
+              properties: {
+                alt: description || '',
+                height,
+                id,
+                src: `data:image/png;base64,${screenshot.toString('base64')}`,
+                title,
+                width
+              },
+              children: []
+            }
+          } else if (strategy === 'inline-svg') {
+            replacement = fromHtmlIsomorphic(svg, { fragment: true }).children[0] as Element
+          } else if (strategy === 'img-svg') {
+            replacement = {
+              type: 'element',
+              tagName: 'img',
+              properties: {
+                alt: description || '',
+                height,
+                id,
+                src: svgToDataURI(svg),
+                title,
+                width
+              },
+              children: []
+            }
           }
-        } else if (strategy === 'inline-svg') {
-          replacement = fromHtmlIsomorphic(svg, { fragment: true }).children[0] as Element
-        } else if (strategy === 'img-svg') {
-          replacement = {
-            type: 'element',
-            tagName: 'img',
-            properties: {
-              alt: description || '',
-              height,
-              id,
-              src: svgToDataURI(svg),
-              title,
-              width
-            },
-            children: []
-          }
+        } else if (options?.errorFallback) {
+          replacement = options.errorFallback(node, diagram, result.reason, file)
+        } else {
+          file.fail(result.reason, node, 'rehype-mermaidjs:rehype-mermaidjs')
         }
-      } else if (options?.errorFallback) {
-        replacement = options.errorFallback(node, diagram, result.reason, file)
-      } else {
-        file.fail(result.reason, node, 'rehype-mermaidjs:rehype-mermaidjs')
-      }
 
-      const nodeIndex = parent.children.indexOf(node)
-      if (replacement) {
-        parent.children[nodeIndex] = replacement
-      } else {
-        parent.children.splice(nodeIndex, 1)
+        const nodeIndex = parent.children.indexOf(node)
+        if (replacement) {
+          parent.children[nodeIndex] = replacement
+        } else {
+          parent.children.splice(nodeIndex, 1)
+        }
       }
-    }
+    })
   }
 }
 

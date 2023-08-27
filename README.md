@@ -122,6 +122,8 @@ example, this yields:
 </html>
 ```
 
+This strategy is asynchronous.
+
 ### `'img-svg'`
 
 This strategy renders a diagram as an `<img>` element with an inline SVG image. Given the example,
@@ -139,6 +141,8 @@ this yields:
 </html>
 ```
 
+This strategy is asynchronous.
+
 ### `'inline-svg'`
 
 This strategy renders a diagram as an inline `<svg>` element. Given the example, this yields:
@@ -154,6 +158,8 @@ This strategy renders a diagram as an inline `<svg>` element. Given the example,
   </body>
 </html>
 ```
+
+This strategy is asynchronous.
 
 ### `'pre-mermaid'`
 
@@ -191,6 +197,8 @@ import mermaid from 'mermaid'
 
 mermaid.initialize({ startOnLoad: true })
 ```
+
+This strategy is synchronous.
 
 ## API
 
