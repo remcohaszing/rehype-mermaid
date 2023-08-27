@@ -19,14 +19,9 @@ interface CodeInstance {
   diagram: string
 
   /**
-   * The hast node that should be replaced.
+   * The inclusive ancestors of the element to process.
    */
-  node: Element
-
-  /**
-   * The parent of the node that should be replaced.
-   */
-  parent: Element | Root
+  ancestors: Element[]
 }
 
 /**
@@ -138,8 +133,8 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
         return
       }
 
-      let codeElement = node
-      let parent = ancestors.at(-1)!
+      const parent = ancestors.at(-1)!
+      let inclusiveAncestors = ancestors as Element[]
 
       // This is <code> wrapped in a <pre> element.
       if (parent.type === 'element' && parent.tagName === 'pre') {
@@ -154,17 +149,13 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
             return
           }
         }
-
-        // We want to replace the parent (<pre>), not the child (<code>).
-        codeElement = parent
-        // The grandparent becomes the parent.
-        parent = ancestors.at(-2)!
+      } else {
+        inclusiveAncestors = [...inclusiveAncestors, node]
       }
 
       instances.push({
-        node: codeElement,
         diagram: toText(node, { whitespace: 'pre' }),
-        parent
+        ancestors: inclusiveAncestors
       })
     })
 
@@ -174,7 +165,10 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
     }
 
     if (strategy === 'pre-mermaid') {
-      for (const { diagram, node, parent } of instances) {
+      for (const { ancestors, diagram } of instances) {
+        const parent = ancestors.at(-2)!
+        const node = ancestors.at(-1)!
+
         parent.children[parent.children.indexOf(node)] = {
           type: 'element',
           tagName: 'pre',
@@ -191,9 +185,10 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
       instances.map((instance) => instance.diagram),
       { ...options, screenshot: strategy === 'img-png' }
     ).then((results) => {
-      for (const [index, { diagram, node, parent }] of instances.entries()) {
-        let replacement: ElementContent | null | undefined | void
+      for (const [index, { ancestors, diagram }] of instances.entries()) {
+        const node = ancestors.at(-1)!
         const result = results[index]
+        let replacement: ElementContent | null | undefined | void
 
         if (result.status === 'fulfilled') {
           const { description, height, id, screenshot, svg, title, width } = result.value
@@ -232,9 +227,16 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
         } else if (options?.errorFallback) {
           replacement = options.errorFallback(node, diagram, result.reason, file)
         } else {
-          file.fail(result.reason, node, 'rehype-mermaidjs:rehype-mermaidjs')
+          const message = file.message(result.reason, {
+            ruleId: 'rehype-mermaidjs',
+            source: 'rehype-mermaidjs',
+            ancestors
+          })
+          message.fatal = true
+          throw message
         }
 
+        const parent = ancestors.at(-2)!
         const nodeIndex = parent.children.indexOf(node)
         if (replacement) {
           parent.children[nodeIndex] = replacement

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { describe, test } from 'node:test'
 
-import { type Element } from 'hast'
+import { type Element, type Root } from 'hast'
 import prettier from 'prettier'
 import { rehype } from 'rehype'
 import { removePosition } from 'unist-util-remove-position'
@@ -116,6 +116,12 @@ test('invalid diagram unhandled', async () => {
         start: { line: 1, column: 1, offset: 0 },
         end: { line: 1, column: 55, offset: 54 }
       })
+      const root = error.ancestors![0] as Root
+      const html = root.children[0] as Element
+      const body = html.children[1] as Element
+      const pre = body.children[0] as Element
+      assert.deepEqual(root.type, 'root')
+      assert.deepEqual(error.ancestors, [root, html, body, pre])
       return true
     }
   )
