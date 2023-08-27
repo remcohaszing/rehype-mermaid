@@ -157,7 +157,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
 
         // We want to replace the parent (<pre>), not the child (<code>).
         codeElement = parent
-        // The grantparent becomes the parent.
+        // The grandparent becomes the parent.
         parent = ancestors.at(-2)!
       }
 
