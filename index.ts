@@ -39,8 +39,10 @@ const strategies: Strategy[] = ['img-png', 'img-svg', 'inline-svg', 'pre-mermaid
 /**
  * Validate the strategy option is valid.
  *
- * @param strategy The user provided strategy.
- * @returns The strategy if valid.
+ * @param strategy
+ *   The user provided strategy.
+ * @returns
+ *   The strategy if valid.
  */
 function validateStrategy(strategy: Strategy | undefined = 'inline-svg'): Strategy {
   if (strategies.includes(strategy)) {
@@ -52,9 +54,12 @@ function validateStrategy(strategy: Strategy | undefined = 'inline-svg'): Strate
 /**
  * Check if a hast element has the `language-mermaid` class name.
  *
- * @param element The hast element to check.
- * @param strategy The mermaid strategy to use.
- * @returns Whether or not the element has the `language-mermaid` class name.
+ * @param element
+ *   The hast element to check.
+ * @param strategy
+ *   The mermaid strategy to use.
+ * @returns
+ *   Whether or not the element has the `language-mermaid` class name.
  */
 function isMermaidElement(element: Element, strategy: Strategy): boolean {
   let mermaidClassName: string
@@ -88,12 +93,17 @@ export interface RehypeMermaidOptions
   /**
    * Create a fallback node if processing of a mermaid diagram fails.
    *
-   * @param element The hast element that could not be rendered.
-   * @param diagram The Mermaid diagram that could not be rendered.
-   * @param error The error that was thrown.
-   * @param file The file on which the error occurred.
-   * @returns A fallback node to render instead of the invalid diagram. If nothing is returned, the
-   *   code block is removed
+   * @param element
+   *   The hast element that could not be rendered.
+   * @param diagram
+   *   The Mermaid diagram that could not be rendered.
+   * @param error
+   *   The error that was thrown.
+   * @param file
+   *   The file on which the error occurred.
+   * @returns
+   *   A fallback node to render instead of the invalid diagram. If nothing is returned, the code
+   *   block is removed
    */
   errorFallback?: (
     element: Element,
@@ -119,7 +129,8 @@ export interface RehypeMermaidOptions
  * A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.github.io)
  * diagrams.
  *
- * @param options Options that may be used to tweak the output.
+ * @param options
+ *   Options that may be used to tweak the output.
  */
 const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   const strategy = validateStrategy(options?.strategy)
