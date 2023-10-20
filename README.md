@@ -1,9 +1,9 @@
-# rehype-mermaidjs
+# rehype-mermaid
 
-[![github actions](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/rehype-mermaidjs/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/remcohaszing/rehype-mermaidjs/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/rehype-mermaidjs)
-[![npm version](https://img.shields.io/npm/v/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
-[![npm downloads](https://img.shields.io/npm/dm/rehype-mermaidjs)](https://www.npmjs.com/package/rehype-mermaidjs)
+[![github actions](https://github.com/remcohaszing/rehype-mermaid/actions/workflows/ci.yaml/badge.svg)](https://github.com/remcohaszing/rehype-mermaid/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/gh/remcohaszing/rehype-mermaid/branch/main/graph/badge.svg)](https://codecov.io/gh/remcohaszing/rehype-mermaid)
+[![npm version](https://img.shields.io/npm/v/rehype-mermaid)](https://www.npmjs.com/package/rehype-mermaid)
+[![npm downloads](https://img.shields.io/npm/dm/rehype-mermaid)](https://www.npmjs.com/package/rehype-mermaid)
 
 A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.github.io) diagrams.
 
@@ -28,12 +28,13 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
 - [Compatibility](#compatibility)
 - [Related Projects](#related-projects)
 - [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
 - [License](#license)
 
 ## Installation
 
 ```sh
-npm install rehype-mermaidjs
+npm install rehype-mermaid
 ```
 
 In Node.js this package uses [playwright](https://playwright.dev) under the hood. To use it, you may
@@ -88,7 +89,7 @@ The following script:
 import { readFile } from 'node:fs/promises'
 
 import { rehype } from 'rehype'
-import rehypeMermaid from 'rehype-mermaidjs'
+import rehypeMermaid from 'rehype-mermaid'
 
 const { value } = await rehype()
   .use(rehypeMermaid, {
@@ -266,6 +267,10 @@ Test fixtures are generated and verified using Linux. Rendering on other platfor
 slightly different results. Don’t worry about adding new fixtures, but don’t update existing ones
 that cause CI to fail. Furthermore see my global
 [contributing guidelines](https://github.com/remcohaszing/.github/blob/main/CONTRIBUTING.md).
+
+## Acknowledgements
+
+Thanks to [@bitekong](https://github.com/bitekong) for giving me the npm package name.
 
 ## License
 

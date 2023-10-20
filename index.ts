@@ -239,12 +239,12 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
           replacement = options.errorFallback(node, diagram, result.reason, file)
         } else {
           const message = file.message(result.reason, {
-            ruleId: 'rehype-mermaidjs',
-            source: 'rehype-mermaidjs',
+            ruleId: 'rehype-mermaid',
+            source: 'rehype-mermaid',
             ancestors
           })
           message.fatal = true
-          message.url = 'https://github.com/remcohaszing/rehype-mermaidjs'
+          message.url = 'https://github.com/remcohaszing/rehype-mermaid'
           throw message
         }
 

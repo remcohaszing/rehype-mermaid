@@ -1,5 +1,5 @@
 {
-  "name": "rehype-mermaidjs",
+  "name": "rehype-mermaid",
   "version": "2.0.0",
   "description": "A rehype plugin to render mermaid diagrams",
   "exports": "./index.js",
@@ -14,9 +14,9 @@
   },
   "author": "Remco Haszing <remcohaszing@gmail.com>",
   "license": "MIT",
-  "repository": "remcohaszing/rehype-mermaidjs",
-  "bugs": "https://github.com/remcohaszing/rehype-mermaidjs/issues",
-  "homepage": "https://github.com/remcohaszing/rehype-mermaidjs#readme",
+  "repository": "remcohaszing/rehype-mermaid",
+  "bugs": "https://github.com/remcohaszing/rehype-mermaid/issues",
+  "homepage": "https://github.com/remcohaszing/rehype-mermaid#readme",
   "funding": "https://github.com/sponsors/remcohaszing",
   "keywords": [
     "documentation",

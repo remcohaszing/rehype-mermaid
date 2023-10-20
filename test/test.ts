@@ -106,8 +106,8 @@ test('invalid diagram unhandled', async () => {
     () => processor.process('<pre class="mermaid">This is not a valid diagram</pre>'),
     (error) => {
       assert(error instanceof VFileMessage)
-      assert.equal(error.source, 'rehype-mermaidjs')
-      assert.equal(error.ruleId, 'rehype-mermaidjs')
+      assert.equal(error.source, 'rehype-mermaid')
+      assert.equal(error.ruleId, 'rehype-mermaid')
       assert.equal(
         error.reason,
         'No diagram type detected matching given configuration for text: This is not a valid diagram'
@@ -116,7 +116,7 @@ test('invalid diagram unhandled', async () => {
         start: { line: 1, column: 1, offset: 0 },
         end: { line: 1, column: 55, offset: 54 }
       })
-      assert.equal(error.url, 'https://github.com/remcohaszing/rehype-mermaidjs')
+      assert.equal(error.url, 'https://github.com/remcohaszing/rehype-mermaid')
       const root = error.ancestors![0] as Root
       const html = root.children[0] as Element
       const body = html.children[1] as Element
