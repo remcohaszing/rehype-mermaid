@@ -25,6 +25,9 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
       - [`mermaidConfig`](#mermaidconfig)
       - [`prefix`](#prefix)
       - [`strategy`](#strategy)
+- [Examples](#examples)
+  - [remark](#remark)
+  - [MDX](#mdx)
 - [Compatibility](#compatibility)
 - [Related Projects](#related-projects)
 - [Contributing](#contributing)
@@ -246,6 +249,72 @@ A custom prefix to use for Mermaid IDs. (`string`, default: `mermaid`)
 The render strategy to use. One of [`'img-png'`](#img-png), [`'img-svg'`](#img-svg),
 [`'inline-svg'`](#inline-svg), or [`'pre-mermaid'`](#pre-mermaid). (default:
 [`'inline-svg'`](#inline-svg))
+
+## Examples
+
+### remark
+
+This package works with Mermaid codeblocks in markdown using
+[`remark-parse`](https://github.com/remarkjs/remark/tree/main/packages/remark-parse),
+[`remark-rehype`](https://github.com/remarkjs/remark-rehype), and
+[`rehype-stringify`](https://github.com/rehypejs/rehype/tree/main/packages/rehype-stringify).
+
+```js
+import rehypeMermaid from 'rehype-mermaid'
+import rehypeStringify from 'rehype-stringify'
+import remarkParse from 'remark'
+import remarkRehype from 'remark-rehype'
+import { unified } from 'unified'
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkRehype)
+  .use(rehypeMermaid)
+  .use(rehypeStringify)
+
+const markdown = `
+# Mermaid Diagram
+
+\`\`\`mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+\`\`\`
+`
+
+const { value } = await processor.process(markdown)
+
+console.log(value)
+```
+
+### MDX
+
+This package works with Mermaid codeblocks in MDX.
+
+```js
+import { compile } from '@mdx-js/mdx'
+import rehypeMermaid from 'rehype-mermaid'
+
+const mdx = `
+# Mermaid Diagram
+
+\`\`\`mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+\`\`\`
+`
+
+const { value } = await compile(mdx, {
+  rehypePlugins: [rehypeMermaid]
+})
+
+console.log(value)
+```
 
 ## Compatibility
 
