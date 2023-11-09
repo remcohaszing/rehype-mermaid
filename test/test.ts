@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { describe, test } from 'node:test'
+import { fileURLToPath } from 'node:url'
 
 import { type Element, type Root } from 'hast'
 import prettier from 'prettier'
@@ -35,7 +36,10 @@ async function readFixture(name: string, expectedName: string): Promise<FixtureT
   return {
     input,
     async validate(actual, verify = true) {
-      const normalized = await prettier.format(String(actual), { parser: 'html' })
+      const config = await prettier.resolveConfig(fileURLToPath(expectedPath), {
+        editorconfig: true
+      })
+      const normalized = await prettier.format(String(actual), { ...config, parser: 'html' })
       if (process.argv.includes('update') || !expected) {
         await writeFile(expectedPath, normalized)
       }

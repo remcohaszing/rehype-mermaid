@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npx prettier .
+      - run: npx prettier --check .
 
   remark:
     runs-on: ubuntu-latest
