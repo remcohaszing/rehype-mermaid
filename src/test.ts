@@ -60,9 +60,51 @@ for (const name of fixtureNames) {
       await validate(result, false)
     })
 
+    test('img-png (dark)', async () => {
+      const { input, validate } = await readFixture(name, 'img-png-dark.html')
+      const processor = rehype().use(rehypeMermaid, { strategy: 'img-png', dark: true })
+
+      const result = await processor.process(input)
+
+      await validate(result, false)
+    })
+
+    test('img-png (dark custom)', async () => {
+      const { input, validate } = await readFixture(name, 'img-png-dark-custom.html')
+      const processor = rehype().use(rehypeMermaid, {
+        strategy: 'img-png',
+        dark: { theme: 'forest' }
+      })
+
+      const result = await processor.process(input)
+
+      await validate(result, false)
+    })
+
     test('img-svg', async () => {
       const { input, validate } = await readFixture(name, 'img-svg.html')
       const processor = rehype().use(rehypeMermaid, { strategy: 'img-svg' })
+
+      const result = await processor.process(input)
+
+      await validate(result)
+    })
+
+    test('img-svg (dark)', async () => {
+      const { input, validate } = await readFixture(name, 'img-svg-dark.html')
+      const processor = rehype().use(rehypeMermaid, { strategy: 'img-svg', dark: true })
+
+      const result = await processor.process(input)
+
+      await validate(result)
+    })
+
+    test('img-svg (dark custom)', async () => {
+      const { input, validate } = await readFixture(name, 'img-svg-dark-custom.html')
+      const processor = rehype().use(rehypeMermaid, {
+        strategy: 'img-svg',
+        dark: { theme: 'forest' }
+      })
 
       const result = await processor.process(input)
 
