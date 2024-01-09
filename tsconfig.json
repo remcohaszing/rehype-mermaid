@@ -11,8 +11,5 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2021"
-  },
-  "ts-node": {
-    "transpileOnly": true
   }
 }
