@@ -6,13 +6,12 @@ import { fileURLToPath } from 'node:url'
 import { type Element, type Root } from 'hast'
 import prettier from 'prettier'
 import { rehype } from 'rehype'
+import rehypeMermaid from 'rehype-mermaid'
 import { removePosition } from 'unist-util-remove-position'
 import { type VFile } from 'vfile'
 import { VFileMessage } from 'vfile-message'
 
-import rehypeMermaid from '../index.js'
-
-const fixturesPath = new URL('fixtures/', import.meta.url)
+const fixturesPath = new URL('../fixtures/', import.meta.url)
 const fixtureNames = (await readdir(fixturesPath)).sort()
 
 interface FixtureTest {

@@ -2,15 +2,18 @@
   "name": "rehype-mermaid",
   "version": "2.0.1",
   "description": "A rehype plugin to render mermaid diagrams",
-  "exports": "./index.js",
+  "exports": "./dist/index.js",
+  "main": "./dist/index.js",
   "type": "module",
   "files": [
-    "index.d.ts",
-    "index.js"
+    "dist",
+    "src",
+    "!test*"
   ],
   "scripts": {
-    "prepack": "tsc --noEmit false",
-    "test": "c8 ts-node-esm test/test.ts"
+    "prepack": "tsc --build",
+    "pretest": "tsc --build",
+    "test": "c8 node --test"
   },
   "author": "Remco Haszing <remcohaszing@gmail.com>",
   "license": "MIT",
@@ -48,7 +51,6 @@
     "rehype": "^13.0.0",
     "remark-cli": "^11.0.0",
     "remark-preset-remcohaszing": "^2.0.0",
-    "ts-node": "^10.0.0",
     "typescript": "^5.0.0",
     "unist-util-remove-position": "^5.0.0",
     "vfile-message": "^4.0.0"

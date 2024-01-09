@@ -1,4 +1,5 @@
 {
   "100": true,
+  "exclude": ["**/test*"],
   "reporter": ["html", "lcov", "text"]
 }
