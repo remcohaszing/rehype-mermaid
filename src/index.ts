@@ -35,6 +35,8 @@ const nonWhitespacePattern = /\w/
  */
 type Strategy = 'img-png' | 'img-svg' | 'inline-svg' | 'pre-mermaid'
 
+type ColorScheme = 'dark' | 'light'
+
 const strategies: Strategy[] = ['img-png', 'img-svg', 'inline-svg', 'pre-mermaid']
 
 /**
@@ -107,27 +109,56 @@ function toDataURI(result: RenderResult, isSrcset?: boolean): string {
 }
 
 /**
+ * Invert the given color scheme.
+ *
+ * @param colorScheme
+ *   The color scheme to invert.
+ * @returns
+ *   `light` if the color scheme is `dark`, otherwise `dark`.
+ */
+function invertColorScheme(colorScheme: ColorScheme | undefined): ColorScheme {
+  return colorScheme === 'dark' ? 'light' : 'dark'
+}
+
+/**
  * Convert a Mermaid render result to a hast element.
  *
  * @param light
  *   The light Mermaid render result.
  * @param dark
  *   The dark mermaid render result.
+ * @param colorScheme
+ *   The default color scheme.
  * @returns
  *   If a dark render result exists, a responsive `<picture>` element that favors light mode.
  *   Otherwise an `<img>` element containing only the light mode result.
  */
-function toImageElement(light: RenderResult, dark: RenderResult | undefined): Element {
+function toImageElement(
+  light: RenderResult,
+  dark: RenderResult | undefined,
+  colorScheme: ColorScheme | undefined
+): Element {
+  let imgResult: RenderResult
+  let pictureResult: RenderResult
+
+  if (colorScheme === 'dark') {
+    imgResult = dark || light
+    pictureResult = light
+  } else {
+    imgResult = light
+    pictureResult = dark!
+  }
+
   const img: Element = {
     type: 'element',
     tagName: 'img',
     properties: {
-      alt: light.description || '',
-      height: light.height,
-      id: light.id,
-      src: toDataURI(light),
-      title: light.title,
-      width: light.width
+      alt: imgResult.description || '',
+      height: imgResult.height,
+      id: imgResult.id,
+      src: toDataURI(imgResult),
+      title: imgResult.title,
+      width: imgResult.width
     },
     children: []
   }
@@ -145,11 +176,11 @@ function toImageElement(light: RenderResult, dark: RenderResult | undefined): El
         type: 'element',
         tagName: 'source',
         properties: {
-          height: dark.height,
-          id: dark.id,
-          media: '(prefers-color-scheme: dark)',
-          srcset: toDataURI(dark, true),
-          width: dark.width
+          height: pictureResult.height,
+          id: pictureResult.id,
+          media: `(prefers-color-scheme: ${invertColorScheme(colorScheme)})`,
+          srcset: toDataURI(pictureResult, true),
+          width: pictureResult.width
         },
         children: []
       },
@@ -195,6 +226,27 @@ function handleError(
   throw message
 }
 
+/**
+ * Get the color scheme from a `color-scheme` meta element.
+ *
+ * @param element
+ *   The meta element to get the color scheme from.
+ * @returns
+ *   The detected color scheme.
+ */
+function getColorScheme(element: Element): ColorScheme | undefined {
+  if (typeof element.properties.content !== 'string') {
+    return
+  }
+
+  const colorSchemes = parse(element.properties.content)
+  for (const colorScheme of colorSchemes) {
+    if (colorScheme === 'light' || colorScheme === 'dark') {
+      return colorScheme
+    }
+  }
+}
+
 export interface RehypeMermaidOptions
   extends CreateMermaidRendererOptions,
     Omit<RenderOptions, 'screenshot'> {
@@ -204,6 +256,14 @@ export interface RehypeMermaidOptions
    * This option is only supported by the `img-png` and `img-svg` strategies.
    */
   dark?: RenderOptions['mermaidConfig'] | true
+
+  /**
+   * The default color scheme.
+   *
+   * If not specified, `rehype-mermaid` will determine the color scheme based on the `color-scheme`
+   * meta tag. If this doesn’t exist, the default color scheme is `light`.
+   */
+  colorScheme?: ColorScheme
 
   /**
    * Create a fallback node if processing of a mermaid diagram fails.
@@ -250,11 +310,16 @@ export interface RehypeMermaidOptions
 const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   const strategy = validateStrategy(options?.strategy)
   const renderDiagrams = createMermaidRenderer(options)
+  let colorScheme = options?.colorScheme
 
   return (ast, file) => {
     const instances: CodeInstance[] = []
 
     visitParents(ast, 'element', (node, ancestors) => {
+      if (!colorScheme && node.tagName === 'meta' && node.properties.name === 'color-scheme') {
+        colorScheme = getColorScheme(node)
+      }
+
       if (!isMermaidElement(node, strategy)) {
         return
       }
@@ -345,7 +410,7 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
           replacement = fromHtmlIsomorphic(lightResult.value.svg, { fragment: true })
             .children[0] as Element
         } else {
-          replacement = toImageElement(lightResult.value, darkResult?.value)
+          replacement = toImageElement(lightResult.value, darkResult?.value, colorScheme)
         }
 
         const { ancestors } = instance

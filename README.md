@@ -19,6 +19,7 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
   - [`unified().use(rehypeMermaid, options?)`](#unifieduserehypemermaid-options)
     - [`options`](#options)
       - [`browser`](#browser)
+      - [`colorScheme`](#colorscheme)
       - [`css`](#css)
       - [`dark`](#dark)
       - [`errorFallback`](#errorfallback)
@@ -224,6 +225,13 @@ This package has a default export `rehypeMermaid`.
 ##### `browser`
 
 The Playwright browser to use. (`object`, default: chromium)
+
+##### `colorScheme`
+
+The default color scheme.
+
+If not specified, `rehype-mermaid` will determine the color scheme based on the `color-scheme` meta
+tag. If this doesn’t exist, the default color scheme is `light`. (`string`)
 
 ##### `css`
 
