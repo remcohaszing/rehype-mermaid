@@ -4,7 +4,8 @@ import { toText } from 'hast-util-to-text'
 import {
   createMermaidRenderer,
   type CreateMermaidRendererOptions,
-  type RenderOptions
+  type RenderOptions,
+  type RenderResult
 } from 'mermaid-isomorphic'
 import svgToDataURI from 'mini-svg-data-uri'
 import { parse } from 'space-separated-tokens'
@@ -33,6 +34,8 @@ const nonWhitespacePattern = /\w/
  * Allowed output strategies.
  */
 type Strategy = 'img-png' | 'img-svg' | 'inline-svg' | 'pre-mermaid'
+
+type ColorScheme = 'dark' | 'light'
 
 const strategies: Strategy[] = ['img-png', 'img-svg', 'inline-svg', 'pre-mermaid']
 
@@ -87,9 +90,181 @@ function isMermaidElement(element: Element, strategy: Strategy): boolean {
   return className.includes(mermaidClassName)
 }
 
+/**
+ * Convert a render result to a data URI.
+ *
+ * @param result
+ *   The render result to turn into a data URI.
+ * @param isSrcset
+ *   Whether the result is for a `srcset` or a `src` attribute.
+ * @returns
+ *   The data URI.
+ */
+function toDataURI(result: RenderResult, isSrcset?: boolean): string {
+  if (result.screenshot) {
+    return `data:image/png;base64,${result.screenshot.toString('base64')}`
+  }
+
+  return isSrcset ? svgToDataURI.toSrcset(result.svg) : svgToDataURI(result.svg)
+}
+
+/**
+ * Invert the given color scheme.
+ *
+ * @param colorScheme
+ *   The color scheme to invert.
+ * @returns
+ *   `light` if the color scheme is `dark`, otherwise `dark`.
+ */
+function invertColorScheme(colorScheme: ColorScheme | undefined): ColorScheme {
+  return colorScheme === 'dark' ? 'light' : 'dark'
+}
+
+/**
+ * Convert a Mermaid render result to a hast element.
+ *
+ * @param light
+ *   The light Mermaid render result.
+ * @param dark
+ *   The dark mermaid render result.
+ * @param colorScheme
+ *   The default color scheme.
+ * @returns
+ *   If a dark render result exists, a responsive `<picture>` element that favors light mode.
+ *   Otherwise an `<img>` element containing only the light mode result.
+ */
+function toImageElement(
+  light: RenderResult,
+  dark: RenderResult | undefined,
+  colorScheme: ColorScheme | undefined
+): Element {
+  let imgResult: RenderResult
+  let pictureResult: RenderResult
+
+  if (colorScheme === 'dark') {
+    imgResult = dark || light
+    pictureResult = light
+  } else {
+    imgResult = light
+    pictureResult = dark!
+  }
+
+  const img: Element = {
+    type: 'element',
+    tagName: 'img',
+    properties: {
+      alt: imgResult.description || '',
+      height: imgResult.height,
+      id: imgResult.id,
+      src: toDataURI(imgResult),
+      title: imgResult.title,
+      width: imgResult.width
+    },
+    children: []
+  }
+
+  if (!dark) {
+    return img
+  }
+
+  return {
+    type: 'element',
+    tagName: 'picture',
+    properties: {},
+    children: [
+      {
+        type: 'element',
+        tagName: 'source',
+        properties: {
+          height: pictureResult.height,
+          id: pictureResult.id,
+          media: `(prefers-color-scheme: ${invertColorScheme(colorScheme)})`,
+          srcset: toDataURI(pictureResult, true),
+          width: pictureResult.width
+        },
+        children: []
+      },
+      img
+    ]
+  }
+}
+
+/**
+ * Handle an error.
+ *
+ * If the error fallback is defined, use its result. Otherwise an error is thrown.
+ *
+ * @param reason
+ *   The reason the error occurred.
+ * @param instance
+ *   The diagram code instance.
+ * @param file
+ *   The file on which the error should be reported.
+ * @param options
+ *   The render options.
+ * @returns
+ *   The error fallback renderer.
+ */
+function handleError(
+  reason: string,
+  instance: CodeInstance,
+  file: VFile,
+  options: RehypeMermaidOptions | undefined
+): ElementContent | null | undefined | void {
+  const { ancestors, diagram } = instance
+  if (options?.errorFallback) {
+    return options.errorFallback(ancestors.at(-1)!, diagram, reason, file)
+  }
+
+  const message = file.message(reason, {
+    ruleId: 'rehype-mermaid',
+    source: 'rehype-mermaid',
+    ancestors
+  })
+  message.fatal = true
+  message.url = 'https://github.com/remcohaszing/rehype-mermaid'
+  throw message
+}
+
+/**
+ * Get the color scheme from a `color-scheme` meta element.
+ *
+ * @param element
+ *   The meta element to get the color scheme from.
+ * @returns
+ *   The detected color scheme.
+ */
+function getColorScheme(element: Element): ColorScheme | undefined {
+  if (typeof element.properties.content !== 'string') {
+    return
+  }
+
+  const colorSchemes = parse(element.properties.content)
+  for (const colorScheme of colorSchemes) {
+    if (colorScheme === 'light' || colorScheme === 'dark') {
+      return colorScheme
+    }
+  }
+}
+
 export interface RehypeMermaidOptions
   extends CreateMermaidRendererOptions,
     Omit<RenderOptions, 'screenshot'> {
+  /**
+   * If specified, add responsive dark mode using a `<picture>` element.
+   *
+   * This option is only supported by the `img-png` and `img-svg` strategies.
+   */
+  dark?: RenderOptions['mermaidConfig'] | true
+
+  /**
+   * The default color scheme.
+   *
+   * If not specified, `rehype-mermaid` will determine the color scheme based on the `color-scheme`
+   * meta tag. If this doesn’t exist, the default color scheme is `light`.
+   */
+  colorScheme?: ColorScheme
+
   /**
    * Create a fallback node if processing of a mermaid diagram fails.
    *
@@ -135,11 +310,16 @@ export interface RehypeMermaidOptions
 const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   const strategy = validateStrategy(options?.strategy)
   const renderDiagrams = createMermaidRenderer(options)
+  let colorScheme = options?.colorScheme
 
   return (ast, file) => {
     const instances: CodeInstance[] = []
 
     visitParents(ast, 'element', (node, ancestors) => {
+      if (!colorScheme && node.tagName === 'meta' && node.properties.name === 'color-scheme') {
+        colorScheme = getColorScheme(node)
+      }
+
       if (!isMermaidElement(node, strategy)) {
         return
       }
@@ -192,62 +372,49 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
       return
     }
 
-    return renderDiagrams(
-      instances.map((instance) => instance.diagram),
-      { ...options, screenshot: strategy === 'img-png' }
-    ).then((results) => {
-      for (const [index, { ancestors, diagram }] of instances.entries()) {
-        const node = ancestors.at(-1)!
-        const result = results[index]
+    const promises = [
+      renderDiagrams(
+        instances.map((instance) => instance.diagram),
+        { ...options, screenshot: strategy === 'img-png' }
+      )
+    ]
+    if (options?.dark) {
+      promises.push(
+        renderDiagrams(
+          instances.map((instance) => instance.diagram),
+          {
+            ...options,
+            screenshot: strategy === 'img-png',
+            mermaidConfig: options.dark === true ? { theme: 'dark' } : options.dark,
+            prefix: `${options.prefix || 'mermaid'}-dark`
+          }
+        )
+      )
+    }
+
+    return Promise.all(promises).then(([lightResults, darkResults]) => {
+      for (const [index, instance] of instances.entries()) {
+        const lightResult = lightResults[index]
+        const darkResult = darkResults?.[index]
         let replacement: ElementContent | null | undefined | void
 
-        if (result.status === 'fulfilled') {
-          const { description, height, id, screenshot, svg, title, width } = result.value
+        if (lightResult.status === 'rejected') {
+          replacement = handleError(lightResult.reason, instance, file, options)
 
-          if (screenshot) {
-            replacement = {
-              type: 'element',
-              tagName: 'img',
-              properties: {
-                alt: description || '',
-                height,
-                id,
-                src: `data:image/png;base64,${screenshot.toString('base64')}`,
-                title,
-                width
-              },
-              children: []
-            }
-          } else if (strategy === 'inline-svg') {
-            replacement = fromHtmlIsomorphic(svg, { fragment: true }).children[0] as Element
-          } else if (strategy === 'img-svg') {
-            replacement = {
-              type: 'element',
-              tagName: 'img',
-              properties: {
-                alt: description || '',
-                height,
-                id,
-                src: svgToDataURI(svg),
-                title,
-                width
-              },
-              children: []
-            }
-          }
-        } else if (options?.errorFallback) {
-          replacement = options.errorFallback(node, diagram, result.reason, file)
+          /* c8 ignore start */
+        } else if (darkResult?.status === 'rejected') {
+          replacement = handleError(darkResult.reason, instance, file, options)
+
+          /* c8 ignore stop */
+        } else if (strategy === 'inline-svg') {
+          replacement = fromHtmlIsomorphic(lightResult.value.svg, { fragment: true })
+            .children[0] as Element
         } else {
-          const message = file.message(result.reason, {
-            ruleId: 'rehype-mermaid',
-            source: 'rehype-mermaid',
-            ancestors
-          })
-          message.fatal = true
-          message.url = 'https://github.com/remcohaszing/rehype-mermaid'
-          throw message
+          replacement = toImageElement(lightResult.value, darkResult?.value, colorScheme)
         }
 
+        const { ancestors } = instance
+        const node = ancestors.at(-1)!
         const parent = ancestors.at(-2)!
         const nodeIndex = parent.children.indexOf(node)
         if (replacement) {

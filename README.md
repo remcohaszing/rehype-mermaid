@@ -19,7 +19,9 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
   - [`unified().use(rehypeMermaid, options?)`](#unifieduserehypemermaid-options)
     - [`options`](#options)
       - [`browser`](#browser)
+      - [`colorScheme`](#colorscheme)
       - [`css`](#css)
+      - [`dark`](#dark)
       - [`errorFallback`](#errorfallback)
       - [`launchOptions`](#launchoptions)
       - [`mermaidConfig`](#mermaidconfig)
@@ -128,6 +130,8 @@ example, this yields:
 
 This strategy is asynchronous.
 
+This strategy supports the [`dark`](#dark) option.
+
 ### `'img-svg'`
 
 This strategy renders a diagram as an `<img>` element with an inline SVG image. Given the example,
@@ -147,6 +151,8 @@ this yields:
 
 This strategy is asynchronous.
 
+This strategy supports the [`dark`](#dark) option.
+
 ### `'inline-svg'`
 
 This strategy renders a diagram as an inline `<svg>` element. Given the example, this yields:
@@ -164,6 +170,8 @@ This strategy renders a diagram as an inline `<svg>` element. Given the example,
 ```
 
 This strategy is asynchronous.
+
+This strategy does not support the [`dark`](#dark) option.
 
 ### `'pre-mermaid'`
 
@@ -204,6 +212,8 @@ mermaid.initialize({ startOnLoad: true })
 
 This strategy is synchronous.
 
+This strategy does not support the [`dark`](#dark) option.
+
 ## API
 
 This package has a default export `rehypeMermaid`.
@@ -216,10 +226,23 @@ This package has a default export `rehypeMermaid`.
 
 The Playwright browser to use. (`object`, default: chromium)
 
+##### `colorScheme`
+
+The default color scheme.
+
+If not specified, `rehype-mermaid` will determine the color scheme based on the `color-scheme` meta
+tag. If this doesn’t exist, the default color scheme is `light`. (`string`)
+
 ##### `css`
 
 A URL that points to a custom CSS file to load. Use this to load custom fonts. This option is
 ignored in the browser. You need to include the CSS in your build manually. (`string` | `URL`)
+
+##### `dark`
+
+If specified, add responsive dark mode using a `<picture>` element.
+
+This option is only supported by the [`img-png`](#img-png) and [`img-svg`](#img-svg) strategies.
 
 ##### `errorFallback`
 
