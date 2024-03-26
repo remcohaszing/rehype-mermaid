@@ -12,6 +12,7 @@ import { VFileMessage } from 'vfile-message'
 testFixturesDirectory({
   directory: new URL('../fixtures', import.meta.url),
   prettier: true,
+  write: true,
   tests: {
     'img-png.html'(file) {
       return rehype().use(rehypeMermaid, { strategy: 'img-png' }).process(file)
