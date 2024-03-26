@@ -46,7 +46,7 @@ In Node.js this package uses [playwright](https://playwright.dev) under the hood
 need to install additional dependencies. These can be installed with:
 
 ```sh
-npx playwright install --with-deps chromium
+npx playwright-core install --with-deps chromium
 ```
 
 See the Playwright [Browsers](https://playwright.dev/docs/browsers) documentation for more
