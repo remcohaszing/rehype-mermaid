@@ -1,135 +1,61 @@
 import assert from 'node:assert/strict'
-import { readdir, readFile, writeFile } from 'node:fs/promises'
-import { describe, test } from 'node:test'
-import { fileURLToPath } from 'node:url'
+import { test } from 'node:test'
 
 import { type Element, type Root } from 'hast'
-import prettier from 'prettier'
 import { rehype } from 'rehype'
 import rehypeMermaid from 'rehype-mermaid'
+import { testFixturesDirectory } from 'snapshot-fixtures'
 import { removePosition } from 'unist-util-remove-position'
 import { type VFile } from 'vfile'
 import { VFileMessage } from 'vfile-message'
 
-const fixturesPath = new URL('../fixtures/', import.meta.url)
-const fixtureNames = (await readdir(fixturesPath)).sort()
+testFixturesDirectory({
+  directory: new URL('../fixtures', import.meta.url),
+  prettier: true,
+  tests: {
+    'img-png.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'img-png' }).process(file)
+    },
 
-interface FixtureTest {
-  input: string
-  validate: (actual: VFile, verify?: boolean) => Promise<void>
-}
+    'img-png-dark.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'img-png', dark: true }).process(file)
+    },
 
-async function readFixture(name: string, expectedName: string): Promise<FixtureTest> {
-  const fixturePath = new URL(`${name}/`, fixturesPath)
-  const inputPath = new URL('input.html', fixturePath)
-  const expectedPath = new URL(expectedName, fixturePath)
+    'img-png-dark-custom.html'(file) {
+      return rehype()
+        .use(rehypeMermaid, {
+          strategy: 'img-png',
+          dark: { theme: 'forest' }
+        })
+        .process(file)
+    },
 
-  const input = await readFile(inputPath, 'utf8')
-  let expected: string | undefined
-  try {
-    expected = await readFile(expectedPath, 'utf8')
-  } catch {
-    await writeFile(expectedPath, '')
-  }
+    'img-svg.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'img-svg' }).process(file)
+    },
 
-  return {
-    input,
-    async validate(actual, verify = true) {
-      const config = await prettier.resolveConfig(fileURLToPath(expectedPath), {
-        editorconfig: true
-      })
-      const normalized = await prettier.format(String(actual), { ...config, parser: 'html' })
-      if (process.argv.includes('update') || !expected) {
-        await writeFile(expectedPath, normalized)
-      }
-      if (verify) {
-        assert.equal(normalized, expected)
-      }
+    'img-svg-dark.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'img-svg', dark: true }).process(file)
+    },
+
+    'img-svg-dark-custom.html'(file) {
+      return rehype()
+        .use(rehypeMermaid, {
+          strategy: 'img-svg',
+          dark: { theme: 'forest' }
+        })
+        .process(file)
+    },
+
+    'inline-svg.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'inline-svg', dark: true }).process(file)
+    },
+
+    'pre-mermaid.html'(file) {
+      return rehype().use(rehypeMermaid, { strategy: 'pre-mermaid', dark: true }).process(file)
     }
   }
-}
-
-for (const name of fixtureNames) {
-  describe(name, () => {
-    test('img-png', async () => {
-      const { input, validate } = await readFixture(name, 'img-png.html')
-      const processor = rehype().use(rehypeMermaid, { strategy: 'img-png' })
-
-      const result = await processor.process(input)
-
-      await validate(result, false)
-    })
-
-    test('img-png (dark)', async () => {
-      const { input, validate } = await readFixture(name, 'img-png-dark.html')
-      const processor = rehype().use(rehypeMermaid, { strategy: 'img-png', dark: true })
-
-      const result = await processor.process(input)
-
-      await validate(result, false)
-    })
-
-    test('img-png (dark custom)', async () => {
-      const { input, validate } = await readFixture(name, 'img-png-dark-custom.html')
-      const processor = rehype().use(rehypeMermaid, {
-        strategy: 'img-png',
-        dark: { theme: 'forest' }
-      })
-
-      const result = await processor.process(input)
-
-      await validate(result, false)
-    })
-
-    test('img-svg', async () => {
-      const { input, validate } = await readFixture(name, 'img-svg.html')
-      const processor = rehype().use(rehypeMermaid, { strategy: 'img-svg' })
-
-      const result = await processor.process(input)
-
-      await validate(result)
-    })
-
-    test('img-svg (dark)', async () => {
-      const { input, validate } = await readFixture(name, 'img-svg-dark.html')
-      const processor = rehype().use(rehypeMermaid, { strategy: 'img-svg', dark: true })
-
-      const result = await processor.process(input)
-
-      await validate(result)
-    })
-
-    test('img-svg (dark custom)', async () => {
-      const { input, validate } = await readFixture(name, 'img-svg-dark-custom.html')
-      const processor = rehype().use(rehypeMermaid, {
-        strategy: 'img-svg',
-        dark: { theme: 'forest' }
-      })
-
-      const result = await processor.process(input)
-
-      await validate(result)
-    })
-
-    test('inline-svg', async () => {
-      const { input, validate } = await readFixture(name, 'inline-svg.html')
-      const processor = rehype().use(rehypeMermaid)
-
-      const result = await processor.process(input)
-
-      await validate(result)
-    })
-
-    test('pre-mermaid', async () => {
-      const { input, validate } = await readFixture(name, 'pre-mermaid.html')
-      const processor = rehype().use(rehypeMermaid, { strategy: 'pre-mermaid' })
-
-      const result = processor.processSync(input)
-
-      await validate(result)
-    })
-  })
-}
+})
 
 test('invalid strategy', () => {
   const processor = rehype()
