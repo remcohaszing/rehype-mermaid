@@ -8,12 +8,12 @@
   "files": [
     "dist",
     "src",
-    "!test*"
+    "!*.test.*"
   ],
   "scripts": {
     "prepack": "tsc --build",
     "pretest": "tsc --build",
-    "test": "c8 node --enable-source-maps dist/test.js"
+    "test": "c8 node --enable-source-maps dist/rehype-mermaid.test.js"
   },
   "author": "Remco Haszing <remcohaszing@gmail.com>",
   "license": "MIT",
