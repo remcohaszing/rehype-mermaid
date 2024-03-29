@@ -1,3 +1,4 @@
+root: true
 extends:
   - remcohaszing
 rules:
@@ -6,4 +7,9 @@ overrides:
   - files:
       - '*.md/*.js'
     rules:
+      import/no-extraneous-dependencies: off
+  - files:
+      - '**/*.test.ts'
+    rules:
+      jsdoc/require-jsdoc: off
       import/no-extraneous-dependencies: off
