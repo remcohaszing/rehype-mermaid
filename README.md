@@ -341,7 +341,7 @@ console.log(value)
 
 ## Compatibility
 
-This project is compatible with Node.js 16 or greater. It’s compatible with `mermaid` code blocks
+This project is compatible with Node.js 18 or greater. It’s compatible with `mermaid` code blocks
 processed by [`remark-rehype`](https://github.com/remarkjs/remark-rehype). This means it’s also
 compatible with [MDX](https://mdxjs.com).
 
