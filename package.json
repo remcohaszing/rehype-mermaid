@@ -51,6 +51,7 @@
     "rehype": "^13.0.0",
     "remark-cli": "^12.0.0",
     "remark-preset-remcohaszing": "^3.0.0",
+    "snapshot-fixtures": "^1.0.0",
     "typescript": "^5.0.0",
     "unist-util-remove-position": "^5.0.0",
     "vfile-message": "^4.0.0"
