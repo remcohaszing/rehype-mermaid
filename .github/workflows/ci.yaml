@@ -67,7 +67,7 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ hashFiles('package-lock.json') }}
       - run: npm ci
-      - run: npx playwright-core install --with-deps chromium
+      - run: npx playwright install --with-deps chromium
       - run: npm test
       - uses: actions/upload-artifact@v4
         if: always()
