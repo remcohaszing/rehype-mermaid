@@ -1,6 +1,6 @@
 {
   "name": "rehype-mermaid",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "A rehype plugin to render mermaid diagrams",
   "exports": "./dist/rehype-mermaid.js",
   "main": "./dist/rehype-mermaid.js",
