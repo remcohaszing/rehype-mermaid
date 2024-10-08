@@ -17,16 +17,6 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
   - [`'pre-mermaid'`](#pre-mermaid)
 - [API](#api)
   - [`unified().use(rehypeMermaid, options?)`](#unifieduserehypemermaid-options)
-    - [`options`](#options)
-      - [`browser`](#browser)
-      - [`colorScheme`](#colorscheme)
-      - [`css`](#css)
-      - [`dark`](#dark)
-      - [`errorFallback`](#errorfallback)
-      - [`launchOptions`](#launchoptions)
-      - [`mermaidConfig`](#mermaidconfig)
-      - [`prefix`](#prefix)
-      - [`strategy`](#strategy)
 - [Examples](#examples)
   - [remark](#remark)
   - [MDX](#mdx)
@@ -42,11 +32,12 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
 npm install rehype-mermaid
 ```
 
-In Node.js this package uses [playwright](https://playwright.dev) under the hood. To use it, you may
-need to install additional dependencies. These can be installed with:
+Outside of browsers `rehype-mermaid` uses [Playwright](https://playwright.dev). If you use this
+outside of a browser, you need to install Playwright and a Playwright browser.
 
 ```sh
-npx playwright-core install --with-deps chromium
+npm install playwright
+npx playwright install --with-deps chromium
 ```
 
 See the Playwright [Browsers](https://playwright.dev/docs/browsers) documentation for more

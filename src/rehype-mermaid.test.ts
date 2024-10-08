@@ -12,6 +12,7 @@ import { VFileMessage } from 'vfile-message'
 testFixturesDirectory({
   directory: new URL('../fixtures', import.meta.url),
   prettier: true,
+  write: true,
   tests: {
     'img-png.html': {
       // PNG generation isn’t pixel perfect.
