@@ -213,7 +213,7 @@ This package has a default export `rehypeMermaid`.
 
 #### `options`
 
-##### `browser`
+##### `browserType`
 
 The Playwright browser to use. (`object`, default: chromium)
 
