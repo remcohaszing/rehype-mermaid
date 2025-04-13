@@ -10,6 +10,7 @@
       viewBox="0 0 86.671875 70"
       style="max-width: 86.671875px"
       class="flowchart"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
       id="mermaid-0"
@@ -19,6 +20,28 @@
           font-family: arial, sans-serif;
           font-size: 16px;
           fill: #333;
+        }
+        @keyframes edge-animation-frame {
+          from {
+            stroke-dashoffset: 0;
+          }
+        }
+        @keyframes dash {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        #mermaid-0 .edge-animation-slow {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 50s linear infinite;
+          stroke-linecap: round;
+        }
+        #mermaid-0 .edge-animation-fast {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 20s linear infinite;
+          stroke-linecap: round;
         }
         #mermaid-0 .error-icon {
           fill: #552222;

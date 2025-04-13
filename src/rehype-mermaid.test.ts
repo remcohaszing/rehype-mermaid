@@ -101,7 +101,7 @@ test('invalid diagram unhandled', async () => {
   await assert.rejects(
     () => processor.process('<pre class="mermaid">This is not a valid diagram</pre>'),
     (error) => {
-      assert(error instanceof VFileMessage)
+      assert.ok(error instanceof VFileMessage)
       assert.equal(error.source, 'rehype-mermaid')
       assert.equal(error.ruleId, 'rehype-mermaid')
       assert.equal(
@@ -127,7 +127,7 @@ test('invalid diagram unhandled', async () => {
 test('invalid diagram error fallback returns replacement', async () => {
   let element: Element | undefined
   let diagram: string | undefined
-  let file: VFile | undefined
+  let file: undefined | VFile
   let error: unknown
 
   const processor = rehype().use(rehypeMermaid, {
@@ -149,14 +149,14 @@ test('invalid diagram error fallback returns replacement', async () => {
   })
   assert.equal(diagram, 'This is not a valid diagram')
   assert.equal(file, result)
-  assert(error instanceof Error)
+  assert.ok(error instanceof Error)
   assert.equal(String(result), '<html><head></head><body>This error is handled</body></html>')
 })
 
 test('invalid diagram error fallback returns undefined', async () => {
   let element: Element | undefined
   let diagram: string | undefined
-  let file: VFile | undefined
+  let file: undefined | VFile
   let error: unknown
 
   const processor = rehype().use(rehypeMermaid, {
@@ -177,7 +177,7 @@ test('invalid diagram error fallback returns undefined', async () => {
   })
   assert.equal(diagram, 'This is not a valid diagram')
   assert.equal(file, result)
-  assert(error instanceof Error)
+  assert.ok(error instanceof Error)
   assert.equal(String(result), '<html><head></head><body></body></html>')
 })
 

@@ -10,6 +10,7 @@
       viewBox="0 0 635.078125 202.5"
       style="max-width: 635.078125px"
       class="flowchart"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
       id="mermaid-0"
@@ -21,6 +22,28 @@
           font-family: arial, sans-serif;
           font-size: 16px;
           fill: #333;
+        }
+        @keyframes edge-animation-frame {
+          from {
+            stroke-dashoffset: 0;
+          }
+        }
+        @keyframes dash {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        #mermaid-0 .edge-animation-slow {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 50s linear infinite;
+          stroke-linecap: round;
+        }
+        #mermaid-0 .edge-animation-fast {
+          stroke-dasharray: 9, 5 !important;
+          stroke-dashoffset: 900;
+          animation: dash 20s linear infinite;
+          stroke-linecap: round;
         }
         #mermaid-0 .error-icon {
           fill: #552222;
@@ -308,14 +331,14 @@
               style=""
               class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link"
               id="L_A_B_0"
-              d="M220.969,101.25L225.135,101.25C229.302,101.25,237.635,101.25,243.927,101.292C250.219,101.333,254.469,101.417,258.052,101.487C261.636,101.557,264.553,101.614,266.011,101.643L267.47,101.672"
+              d="M220.969,101.25L225.135,101.25C229.302,101.25,237.635,101.25,245.386,101.32C253.136,101.391,260.303,101.531,263.886,101.601L267.47,101.672"
             ></path>
             <path
               marker-end="url(#mermaid-0_flowchart-v2-pointEnd)"
               style=""
               class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link"
-              id="L_B_D_1"
-              d="M457.969,101.75L462.052,101.667C466.135,101.583,474.302,101.417,480.469,101.333C486.635,101.25,490.802,101.25,494.302,101.25C497.802,101.25,500.635,101.25,502.052,101.25L503.469,101.25"
+              id="L_B_D_0"
+              d="M457.969,101.75L462.052,101.667C466.135,101.583,474.302,101.417,481.885,101.333C489.469,101.25,496.469,101.25,499.969,101.25L503.469,101.25"
             ></path>
           </g>
           <g class="edgeLabels">
