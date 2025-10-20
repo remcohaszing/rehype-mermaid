@@ -276,7 +276,7 @@ This package works with Mermaid codeblocks in markdown using
 ```js
 import rehypeMermaid from 'rehype-mermaid'
 import rehypeStringify from 'rehype-stringify'
-import remarkParse from 'remark'
+import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
