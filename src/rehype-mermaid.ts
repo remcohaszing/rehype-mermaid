@@ -1,4 +1,4 @@
-import { type Element, type ElementContent, type Root } from 'hast'
+import type { Element, ElementContent, Root } from 'hast'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toText } from 'hast-util-to-text'
 import {
