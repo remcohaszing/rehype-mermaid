@@ -1,17 +1,14 @@
-import { type Element, type ElementContent, type Root } from 'hast'
+import type { Element, ElementContent, Root } from 'hast'
+import type { CreateMermaidRendererOptions, RenderOptions, RenderResult } from 'mermaid-isomorphic'
+import type { Plugin } from 'unified'
+import type { VFile } from 'vfile'
+
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toText } from 'hast-util-to-text'
-import {
-  createMermaidRenderer,
-  type CreateMermaidRendererOptions,
-  type RenderOptions,
-  type RenderResult
-} from 'mermaid-isomorphic'
+import { createMermaidRenderer } from 'mermaid-isomorphic'
 import svgToDataURI from 'mini-svg-data-uri'
 import { parse } from 'space-separated-tokens'
-import { type Plugin } from 'unified'
 import { visitParents } from 'unist-util-visit-parents'
-import { type VFile } from 'vfile'
 
 interface CodeInstance {
   /**
@@ -248,8 +245,7 @@ function getColorScheme(element: Element): ColorScheme | undefined {
 }
 
 export interface RehypeMermaidOptions
-  extends CreateMermaidRendererOptions,
-    Omit<RenderOptions, 'screenshot'> {
+  extends CreateMermaidRendererOptions, Omit<RenderOptions, 'screenshot'> {
   /**
    * If specified, add responsive dark mode using a `<picture>` element.
    *

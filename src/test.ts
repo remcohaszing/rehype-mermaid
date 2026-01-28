@@ -1,12 +1,13 @@
+import type { Element, Root } from 'hast'
+import type { VFile } from 'vfile'
+
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
-import { type Element, type Root } from 'hast'
 import { rehype } from 'rehype'
 import rehypeMermaid from 'rehype-mermaid'
 import { testFixturesDirectory } from 'snapshot-fixtures'
 import { removePosition } from 'unist-util-remove-position'
-import { type VFile } from 'vfile'
 import { VFileMessage } from 'vfile-message'
 
 testFixturesDirectory({

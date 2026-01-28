@@ -3,13 +3,15 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "lib": ["es2021"],
+    "lib": ["es2022"],
     "module": "node16",
     "outDir": "dist",
     "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2021"
+    "verbatimModuleSyntax": true,
+    "target": "es2022",
+    "types": ["node"]
   }
 }

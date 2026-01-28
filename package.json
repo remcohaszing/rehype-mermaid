@@ -43,8 +43,8 @@
     "vfile": "^6.0.0"
   },
   "devDependencies": {
-    "@remcohaszing/eslint": "^11.0.0",
-    "@types/node": "^22.0.0",
+    "@remcohaszing/eslint": "^13.0.0",
+    "@types/node": "^25.0.0",
     "c8": "^10.0.0",
     "playwright": "^1.0.0",
     "prettier": "^3.0.0",
