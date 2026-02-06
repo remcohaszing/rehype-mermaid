@@ -99,7 +99,7 @@ const { value } = await rehype()
 console.log(value)
 ```
 
-Yields the following results, depending on the stragey used.
+Yields the following results, depending on the strategy used.
 
 ### `'img-png'`
 
