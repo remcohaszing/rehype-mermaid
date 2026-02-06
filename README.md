@@ -23,7 +23,6 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
 - [Compatibility](#compatibility)
 - [Related Projects](#related-projects)
 - [Contributing](#contributing)
-- [Acknowledgements](#acknowledgements)
 - [License](#license)
 
 ## Installation
@@ -350,10 +349,6 @@ Test fixtures are generated and verified using Linux. Rendering on other platfor
 slightly different results. Don’t worry about adding new fixtures, but don’t update existing ones
 that cause CI to fail. Furthermore see my global
 [contributing guidelines](https://github.com/remcohaszing/.github/blob/main/CONTRIBUTING.md).
-
-## Acknowledgements
-
-Thanks to [@bitekong](https://github.com/bitekong) for giving me the npm package name.
 
 ## License
 
