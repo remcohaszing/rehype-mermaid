@@ -103,8 +103,8 @@ Yields the following results, depending on the strategy used.
 
 ### `'img-png'`
 
-This strategy renders a diagram as an `<img>` element with an inline base64 PNG image. Given the
-example, this yields:
+This strategy renders a diagram as an `<img>` element with an inline base64 PNG image, wrapped in a
+`<div class="mermaid">` container. Given the example, this yields:
 
 ```html
 <html>
@@ -112,8 +112,8 @@ example, this yields:
     <meta charset="utf-8" />
   </head>
   <body>
-    <img alt="" height="215" id="mermaid-0" src="data:image/png;base64,iVBORw0KGgoA…" width="118" />
-    <img alt="" height="215" id="mermaid-1" src="data:image/png;base64,iVBORw0KGgoA…" width="118" />
+    <div class="mermaid"><img alt="" height="215" id="mermaid-0" src="data:image/png;base64,iVBORw0KGgoA…" width="118" /></div>
+    <div class="mermaid"><img alt="" height="215" id="mermaid-1" src="data:image/png;base64,iVBORw0KGgoA…" width="118" /></div>
   </body>
 </html>
 ```
@@ -124,8 +124,8 @@ This strategy supports the [`dark`](#dark) option.
 
 ### `'img-svg'`
 
-This strategy renders a diagram as an `<img>` element with an inline SVG image. Given the example,
-this yields:
+This strategy renders a diagram as an `<img>` element with an inline SVG image, wrapped in a
+`<div class="mermaid">` container. Given the example, this yields:
 
 ```html
 <html>
@@ -133,8 +133,8 @@ this yields:
     <meta charset="utf-8" />
   </head>
   <body>
-    <img alt="" height="215" id="mermaid-0" src="data:image/xml+svg,%3csvg…" width="118" />
-    <img alt="" height="215" id="mermaid-1" src="data:image/xml+svg,%3csvg…" width="118" />
+    <div class="mermaid"><img alt="" height="215" id="mermaid-0" src="data:image/xml+svg,%3csvg…" width="118" /></div>
+    <div class="mermaid"><img alt="" height="215" id="mermaid-1" src="data:image/xml+svg,%3csvg…" width="118" /></div>
   </body>
 </html>
 ```
@@ -145,7 +145,8 @@ This strategy supports the [`dark`](#dark) option.
 
 ### `'inline-svg'`
 
-This strategy renders a diagram as an inline `<svg>` element. Given the example, this yields:
+This strategy renders a diagram as an inline `<svg>` element, wrapped in a `<div class="mermaid">`
+container. Given the example, this yields:
 
 ```html
 <html>
@@ -153,8 +154,8 @@ This strategy renders a diagram as an inline `<svg>` element. Given the example,
     <meta charset="utf-8" />
   </head>
   <body>
-    <svg id="mermaid-0" …>…</svg>
-    <svg id="mermaid-1" …>…</svg>
+    <div class="mermaid"><svg id="mermaid-0" …>…</svg></div>
+    <div class="mermaid"><svg id="mermaid-1" …>…</svg></div>
   </body>
 </html>
 ```

@@ -409,6 +409,15 @@ const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
           replacement = toImageElement(lightResult.value, darkResult?.value, colorScheme)
         }
 
+        if (replacement) {
+          replacement = {
+            type: 'element',
+            tagName: 'div',
+            properties: { className: ['mermaid'] },
+            children: [replacement as ElementContent]
+          }
+        }
+
         const { ancestors } = instance
         const node = ancestors.at(-1)!
         const parent = ancestors.at(-2)!
