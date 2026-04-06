@@ -19,6 +19,7 @@ A [rehype](https://rehype.js.org) plugin to render [mermaid](https://mermaid-js.
   - [`unified().use(rehypeMermaid, options?)`](#unifieduserehypemermaid-options)
 - [Examples](#examples)
   - [remark](#remark)
+  - [React](#react)
   - [MDX](#mdx)
 - [Compatibility](#compatibility)
 - [Related Projects](#related-projects)
@@ -300,6 +301,37 @@ graph TD;
 const { value } = await processor.process(markdown)
 
 console.log(value)
+```
+
+### React
+
+This package works with Mermaid codeblocks in markdown using
+[`react-markdown`](https://github.com/remarkjs/react-markdown). Because `rehype-mermaid` is
+asynchronous, you need to use
+[`MarkdownAsync`](https://github.com/remarkjs/react-markdown#markdownasync) server side or
+[`MarkdownHooks`](https://github.com/remarkjs/react-markdown#markdownhooks) client side.
+
+```jsx
+import { MarkdownAsync } from 'react-markdown'
+import { rehypeMermaid } from 'rehype-mermaid'
+
+const rehypePlugins = [rehypeMermaid]
+
+const markdown = `
+# Mermaid Diagram
+
+\`\`\`mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+\`\`\`
+`
+
+export function App() {
+  return <MarkdownAsync rehypePlugins={rehypePlugins}>{markdown}</MarkdownAsync>
+}
 ```
 
 ### MDX
