@@ -313,7 +313,7 @@ asynchronous, you need to use
 
 ```jsx
 import { MarkdownAsync } from 'react-markdown'
-import { rehypeMermaid } from 'rehype-mermaid'
+import rehypeMermaid from 'rehype-mermaid'
 
 const rehypePlugins = [rehypeMermaid]
 
