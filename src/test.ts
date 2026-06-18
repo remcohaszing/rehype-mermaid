@@ -5,7 +5,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
 import { rehype } from 'rehype'
-import rehypeMermaid from 'rehype-mermaid'
+import rehypeMermaid from '@siriusmart/rehype-mermaid'
 import { testFixturesDirectory } from 'snapshot-fixtures'
 import { removePosition } from 'unist-util-remove-position'
 import { VFileMessage } from 'vfile-message'

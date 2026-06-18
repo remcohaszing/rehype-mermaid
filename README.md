@@ -264,6 +264,10 @@ The render strategy to use. One of [`'img-png'`](#img-png), [`'img-svg'`](#img-s
 [`'inline-svg'`](#inline-svg), or [`'pre-mermaid'`](#pre-mermaid). (default:
 [`'inline-svg'`](#inline-svg))
 
+##### `renderer`
+
+The renderer instance to use. Create one from @siriusmart/mermaid-isomorphic. (`MermaidRenderer`)
+
 ## Examples
 
 ### remark

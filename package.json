@@ -1,6 +1,6 @@
 {
-  "name": "rehype-mermaid",
-  "version": "3.0.0",
+  "name": "@siriusmart/rehype-mermaid",
+  "version": "3.0.1",
   "description": "A rehype plugin to render mermaid diagrams",
   "exports": "./dist/rehype-mermaid.js",
   "main": "./dist/rehype-mermaid.js",
@@ -35,7 +35,7 @@
     "@types/hast": "^3.0.0",
     "hast-util-from-html-isomorphic": "^2.0.0",
     "hast-util-to-text": "^4.0.0",
-    "mermaid-isomorphic": "^3.0.0",
+    "@siriusmart/mermaid-isomorphic": "^3.0.0",
     "mini-svg-data-uri": "^1.0.0",
     "space-separated-tokens": "^2.0.0",
     "unified": "^11.0.0",

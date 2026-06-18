@@ -1,11 +1,11 @@
 import type { Element, ElementContent, Root } from 'hast'
-import type { CreateMermaidRendererOptions, RenderOptions, RenderResult } from 'mermaid-isomorphic'
+import type { CreateMermaidRendererOptions, RenderOptions, RenderResult, MermaidRenderer } from '@siriusmart/mermaid-isomorphic'
 import type { Plugin } from 'unified'
 import type { VFile } from 'vfile'
 
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import { toText } from 'hast-util-to-text'
-import { createMermaidRenderer } from 'mermaid-isomorphic'
+import { createMermaidRenderer } from '@siriusmart/mermaid-isomorphic'
 import svgToDataURI from 'mini-svg-data-uri'
 import { parse } from 'space-separated-tokens'
 import { visitParents } from 'unist-util-visit-parents'
@@ -294,6 +294,11 @@ export interface RehypeMermaidOptions
    * @default 'inline-svg'
    */
   strategy?: Strategy
+
+  /**
+    * Mermaid renderer to use, create one from \@siriusmart/mermaid-isomorphic::createMermaidRenderer
+    */
+  renderer?: MermaidRenderer
 }
 
 /**
@@ -305,7 +310,7 @@ export interface RehypeMermaidOptions
  */
 const rehypeMermaid: Plugin<[RehypeMermaidOptions?], Root> = (options) => {
   const strategy = validateStrategy(options?.strategy)
-  const renderDiagrams = createMermaidRenderer(options)
+  const renderDiagrams = options?.renderer ?? createMermaidRenderer(options)
   let colorScheme = options?.colorScheme
 
   return (ast, file) => {
